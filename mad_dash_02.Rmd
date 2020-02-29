@@ -1,5 +1,5 @@
 ---
-title: "AAVSO Validation Dashboard"
+title: "Betelgeuse: AAVSO Validation Dashboard"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -17,7 +17,7 @@ library(lubridate)
 ```
 ```{r}
 rm(list=ls())
-mydata <- fread("./orion_alf.csv")
+mydata <- fread("./star-data.csv")
 mydata <- janitor::clean_names(mydata)
 mydata$star_name <- toupper(mydata$star_name)
 mydata$Ymd <- JD(mydata$jd,inverse = TRUE)
@@ -32,7 +32,7 @@ my_year <- mydata %>% distinct(Year)
 my_band <- mydata %>% distinct(band)
 my_star <- mydata %>% distinct(star_name)
 #
-alf_ori <- mydata %>% filter(Year ==2019 & band=="Vis.") %>% select(star_name,Ymd,Year,Month,band,magnitude)
+alf_ori <- mydata %>% filter(Year ==2019 & band=="Vis." & star_name=="Z AUR") %>% select(star_name,Ymd,Year,Month,band,magnitude)
 ```
 
 
@@ -40,10 +40,10 @@ alf_ori <- mydata %>% filter(Year ==2019 & band=="Vis.") %>% select(star_name,Ym
 ## Column {data-width=250}
 
 
-### Right Column
+### Star Name
 
 ```{r}
- mydata %>% distinct(star_name)
+mydata %>% distinct(star_name)
 ```
 
 ## Column {data-width=750}
@@ -60,6 +60,6 @@ alf_ori %>% plot_ly() %>% add_histogram(x=~magnitude)
 
 ```{r}
 alf_ori %>% plot_ly() %>% add_boxplot(x=~Month,y=~magnitude) %>%
-  layout(title = ": 2010 and Beyond") %>% layout(yaxis = list(autorange = "reversed"))
+  layout(title = "Monthly Boxplots") %>% layout(yaxis = list(autorange = "reversed"))
 ```
 
